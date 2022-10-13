@@ -14,8 +14,8 @@ def _intro(self):
     names.scale(0.4).next_to(group_name, DOWN, buff=MED_LARGE_BUFF)
 
     self.play(Write(group_name), run_time=2)
-    self.wait(2)
     self.play(Write(names), run_time=5)
+    self.wait(2)
     self.play(Unwrite(names))
 
     # Introduction
