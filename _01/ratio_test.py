@@ -90,6 +90,5 @@ def _ratio_test(self):
 
     self.play(Unwrite(conditions))
     self.play(Unwrite(ratio_test_lines[8]))
-
-
-
+    self.play(Unwrite(ratio_test))
+    self.wait(1)
