@@ -30,7 +30,7 @@ def _intro(self):
     converges = brace.get_text("Converges?").set_color(BLUE_B)
     diverges = brace.get_text("Diverges?").set_color(RED_B)
 
-    details = VGroup(group_name, title, problem, brace, converges, diverges)
+    details = VGroup(title, problem, brace, converges, diverges)
 
     self.play(LaggedStart(Write(title), Write(problem), lag_ratio=3))
 
