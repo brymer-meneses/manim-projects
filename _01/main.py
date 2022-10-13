@@ -108,6 +108,9 @@ class Presentation(Scene):
         for line in ratio_test_lines:
             self.play(Write(line))
 
+        for line in ratio_test_lines:
+            self.play(Unwrite(line))
+
         # Limit Comparison Test
 
         limit_test = Tex("Limit Comparison Test").scale(2).set_color_by_gradient(BLUE, GREEN)
