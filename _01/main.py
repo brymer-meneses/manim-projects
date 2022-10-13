@@ -96,25 +96,23 @@ class Presentation(Scene):
         # RATIO TEST SOLVING PART
 
         ratio_test_lines = VGroup(
-            VGroup( 
+            VGroup(
                 MathTex(r"\lim_{n \to \infty} \left|u_{n+1}\over{u_{n}}\right|", r"=", r"\lim_{n \to \infty}\left|\frac{\frac{2(n+1)}{2(n+1)!}}{\frac{2n}{2n!}}\right|"), # type: ignore
                 MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{2(n+1)\cdot 2n!}{2(n+1)!\cdot 2n}\right|"), # type: ignore
                 MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{(n+1)\cdot 2n!}{(n+1)!\cdot 2n}\right|"), # type: ignore
                 MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{(n+1)\cdot n!}{(n+1)!\cdot n}\right|"), # type: ignore
             ),
-            VGroup( 
+            VGroup(
                 MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{(n+1)\cdot n!}{(n+1)\cdot n\cdot n!}\right|"), # type: ignore
                 MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{(n+1)}{(n+1)\cdot n}\right|"), # type: ignore
                 MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{1}{n}\right|"), # type: ignore
             )
         )
 
-
         ratio_test_lines.scale(0.8)
-        ratio_test_lines[0].arrange(DOWN, MED_SMALL_BUFF)
-        ratio_test_lines[1].arrange(DOWN, MED_SMALL_BUFF)
+        ratio_test_lines[0].arrange(DOWN, MED_SMALL_BUFF) #type: ignore
 
-        self.play(Write(ratio_test_lines[0][0]))
+        self.play(Write(ratio_test_lines[0][0])) #type: ignore
         self.wait(2)
         self.play(
             TransformMatchingTex(ratio_test_lines[0][0].copy(), ratio_test_lines[0][1], path_arc=90 * DEGREES)
@@ -128,16 +126,20 @@ class Presentation(Scene):
             TransformMatchingTex(ratio_test_lines[0][2].copy(), ratio_test_lines[0][3], path_arc=90 * DEGREES)
         )
         self.wait(2)
-        # self.play(
-        #     TransformMatchingTex(lines[2].copy(), lines[3], path_arc=90 * DEGREES)
-        # )
-        # self.wait(2)
-        # self.play(
-        #     TransformMatchingTex(lines[3].copy(), lines[4], path_arc=90 * DEGREES)
-        # )
+
+
+        ratio_test_lines[1][0].next_to(ratio_test_lines[0][2], DOWN)
+        ratio_test_lines[1][1].next_to(ratio_test_lines[0][2], DOWN)
+        ratio_test_lines[1][2].next_to(ratio_test_lines[0][2], DOWN)
+
+        self.play(ReplacementTransform(ratio_test_lines[0][3], ratio_test_lines[1][0]))
+        self.wait(1)
+        self.play(ReplacementTransform(ratio_test_lines[1][0], ratio_test_lines[1][1]))
+        self.wait(1)
+        self.play(ReplacementTransform(ratio_test_lines[1][1], ratio_test_lines[1][2]))
 
         self.wait(5)
-        self.play(Unwrite(ratio_test_lines))
+        self.play(Unwrite(ratio_test_lines[0])) #type: ignore
 
         self.play(Unwrite(details))
 
