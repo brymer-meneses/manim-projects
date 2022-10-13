@@ -91,9 +91,22 @@ class Presentation(Scene):
 
         # Solving Part 
 
-        ratio_test_solution = VGroup(
-            MathTex(r"\lim_{n \to \infty} \left|\frac{u_{n+1}}{u_{n}}\right| = {{L}}"), # type: ignore
+        ratio_test_lines = VGroup(
+            MathTex(r"\lim_{n \to \infty} \left|u_{n+1}\over{u_{n}}\right|", r"=", r"\lim_{n \to \infty}\left|\frac{\frac{2(n+1)}{2(n+1)!}}{\frac{2n}{2n!}}\right|"), # type: ignore
+            MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{2(n+1)\cdot 2n!}{2(n+1)!\cdot 2n}\right|"), # type: ignore
+            MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{(n+1)\cdot 2n!}{(n+1)!\cdot 2n}\right|"), # type: ignore
+            MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{(n+1)\cdot n!}{(n+1)!\cdot n}\right|"), # type: ignore
+            # MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{(n+1)\cdot n!}{(n+1)\cdot n\cdot n!}\right|"), # type: ignore
+            # MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{(n+1)}{(n+1)\cdot n}\right|"), # type: ignore
+            # MathTex(r"=", r"\lim_{n \to \infty}\left|\frac{1}{n}\right|"), # type: ignore
         )
+        ratio_test_lines.arrange(DOWN,MED_SMALL_BUFF)
+
+        ratio_test_lines[0].set_color_by_tex_to_color_map({"{u_{n+1}}": RED})
+
+
+        for line in ratio_test_lines:
+            self.play(Write(line))
 
         # Limit Comparison Test
 
@@ -125,8 +138,6 @@ class Presentation(Scene):
         self.play(Unwrite(limit_test))
         self.play(Uncreate(box))
         self.wait(1)
-
-        # Solving Part
 
 
         # Conclusion
