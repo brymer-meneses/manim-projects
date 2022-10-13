@@ -148,27 +148,48 @@ class Presentation(Scene):
 
         title = Title("Limit Comparison Test")
         self.play(Transform(limit_test, title))
-        given = Tex(r"Given $u_n$ and $v_n$, we have $L=\displaystyle\lim_{n \to \infty} \frac{u_n}{v_n}$ where").next_to(
-            title, DOWN)
+        given1 = MathTex(r"u_n", r"\text{ and }", r"v_n")
+        given2 = MathTex(r"L", r"=\lim_{n \to \infty} ", r"{{u_n}", r"\over", r"{v_n}}")
         conditions = VGroup(
-            Tex(r"If $L=0$ and $\sum v_n$ converges, then $\sum v_n$ converges"),
-            Tex(r"If $L=\infty$ and $\sum v_n$ diverges, then $\sum v_n$ diverges"),
-            Tex(r"If $0<L<\infty$, then either both series converge or both diverge"),
-        ).arrange(DOWN, MED_SMALL_BUFF).scale(.7).next_to(given, DOWN*2)
-        limit_test_solution = VGroup(
-            given, conditions
-        )
+            Tex(r"If ", r"$L$", r"$=0$ and $\sum$",r"$v_n$", r" converges, then $\sum$", r"$u_n$", r" converges"),
+            Tex(r"If ", r"$L$", r"$=\infty$ and $\sum$", r"$v_n$", r" diverges, then $\sum$", r"$u_n$", r" diverges"),
+            Tex(r"If $0<$", r"$L$", r"$<\infty$, then either both series converge or both diverge"),
+        ).arrange(DOWN, MED_SMALL_BUFF).scale(.6)
 
-        self.play(Write(limit_test_solution))
+        given1[0].set_color(BLUE)
+        given1[2].set_color(GREEN)
+        given2[0].set_color(TEAL)
+        given2[2].set_color(BLUE)
+        given2[4].set_color(GREEN)
+        conditions[0][1].set_color(TEAL)
+        conditions[0][3].set_color(GREEN)
+        conditions[0][5].set_color(BLUE)
+        conditions[1][1].set_color(TEAL)
+        conditions[1][3].set_color(GREEN)
+        conditions[1][5].set_color(BLUE)
+        conditions[2][1].set_color(TEAL)
+
+        self.play(Write(given1))
+        self.wait(1)
+
+        self.play(given1.animate.move_to(2 * DOWN).scale(0.7))
+        self.play(Write(given2))
+        self.wait(1)
+
+        self.play(given2.animate.next_to(title, DOWN).scale(0.7))
+        self.play(Write(conditions))
         self.wait(1)
 
         box = SurroundingRectangle(conditions, YELLOW, buff=.2)
         self.play(Create(box))
         self.wait(5)
 
+        limit_test_solution = VGroup(
+            box, given1, given2, conditions
+        )
+
         self.play(Unwrite(limit_test_solution))
         self.play(Unwrite(limit_test))
-        self.play(Uncreate(box))
         self.wait(1)
 
 
