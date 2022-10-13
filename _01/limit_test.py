@@ -82,6 +82,7 @@ def _limit_test(self):
         Tex(r"If ", r"$L$", r"$=\infty$ and $\sum$", r"$v_n$", r" diverges, then $\sum$", r"$u_n$", r" diverges"),
         Tex(r"If $0<$", r"$L$", r"$<\infty$, then either both series converge or both diverge"),
     ).arrange(DOWN, MED_SMALL_BUFF).scale(.6)
+    conditions.arrange(LEFT, buff=MED_SMALL_BUFF)
 
     conditions[0][1].set_color(TEAL)
     conditions[0][3].set_color(GREEN)
