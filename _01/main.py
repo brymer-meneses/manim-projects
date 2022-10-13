@@ -2,7 +2,7 @@ from manim import *
 
 class Presentation(Scene):
 
-    def _group_introduction(self):
+    def construct(self):
         group_name = (
             Text("Problem 2A").move_to(UP).set_color_by_gradient(BLUE, GREEN).scale(1.5)
         ).scale(1.5)
@@ -18,12 +18,7 @@ class Presentation(Scene):
         self.play(Write(group_name), run_time=2)
         self.wait(2)
         self.play(Write(names), run_time=5)
-        self.play(Unwrite(group_name))
         self.play(Unwrite(names))
-
-    def construct(self):
-        self._group_introduction()
-
 
         # Introduction
         title = Title("Problem")
@@ -35,12 +30,11 @@ class Presentation(Scene):
         converges = brace.get_text("Converges?").set_color(BLUE_B)
         diverges = brace.get_text("Diverges?").set_color(RED_B)
 
-        details = VGroup(title, problem, brace, converges, diverges)
+        details = VGroup(group_name, title, problem, brace, converges, diverges)
 
         ratio_test = Tex("Ratio Test").scale(2).set_color_by_gradient(BLUE, GREEN)
 
-
-        self.play(LaggedStart(Write(title), Write(problem), lag_ratio=3))
+        self.play(LaggedStart(Transform(group_name, title), Write(problem), lag_ratio=3))
         self.wait(1)
         self.play(LaggedStart(GrowFromCenter(brace), GrowFromCenter(converges), lag_ratio=1))
         self.wait(1)
@@ -101,16 +95,48 @@ class Presentation(Scene):
             MathTex(r"\lim_{n \to \infty} \left|\frac{u_{n+1}}{u_{n}}\right| = {{L}}"), # type: ignore
         )
 
+        # Limit Comparison Test
+
+        limit_test = Tex("Limit Comparison Test").scale(2).set_color_by_gradient(BLUE, GREEN)
+        self.play(Write(limit_test))
+        self.wait(1)
+
+        title = Title("Limit Comparison Test")
+        self.play(Transform(limit_test, title))
+        given = Tex(r"Given $u_n$ and $v_n$, we have $L=\displaystyle\lim_{n \to \infty} \frac{u_n}{v_n}$ where").next_to(
+            title, DOWN)
+        conditions = VGroup(
+            Tex(r"If $L=0$ and $\sum v_n$ converges, then $\sum v_n$ converges"),
+            Tex(r"If $L=\infty$ and $\sum v_n$ diverges, then $\sum v_n$ diverges"),
+            Tex(r"If $0<L<\infty$, then either both series converge or both diverge"),
+        ).arrange(DOWN, MED_SMALL_BUFF).scale(.7).next_to(given, DOWN*2)
+        limit_test_solution = VGroup(
+            given, conditions
+        )
+
+        self.play(Write(limit_test_solution))
+        self.wait(1)
+
+        box = SurroundingRectangle(conditions, YELLOW, buff=.2)
+        self.play(Create(box))
+        self.wait(5)
+
+        self.play(Unwrite(limit_test_solution))
+        self.play(Unwrite(limit_test))
+        self.play(Uncreate(box))
+        self.wait(1)
+
+        # Solving Part
 
 
+        # Conclusion
 
+        conclusion = Title("Conclusion")
+        self.play(Write(conclusion))
+        self.wait(1)
 
-
-        
-
-
-
-    
+        self.play(Unwrite(conclusion))
+        self.wait(1)
 
 if __name__ == "__main__":
     import os
