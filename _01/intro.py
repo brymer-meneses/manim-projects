@@ -17,6 +17,8 @@ def _intro(self):
     self.play(Write(names), run_time=5)
     self.wait(2)
     self.play(Unwrite(names))
+    self.play(Unwrite(group_name))
+    self.wait(1)
 
     # Introduction
     title = Title("Problem")
@@ -30,8 +32,7 @@ def _intro(self):
 
     details = VGroup(group_name, title, problem, brace, converges, diverges)
 
-
-    self.play(LaggedStart(Transform(group_name, title), Write(problem), lag_ratio=3))
+    self.play(LaggedStart(Write(title), Write(problem), lag_ratio=3))
 
     self.wait(1)
     self.play(LaggedStart(GrowFromCenter(brace), GrowFromCenter(converges), lag_ratio=1))
