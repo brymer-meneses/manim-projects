@@ -1,8 +1,6 @@
 from manim import *
 
 def _limit_test(self):
-    # Limit Comparison Test
-
     limit_test = Tex("Limit Comparison Test").scale(2).set_color_by_gradient(BLUE, GREEN)
     self.play(Write(limit_test))
     self.wait(1)

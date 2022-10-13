@@ -4,9 +4,9 @@ def _ratio_test(self):
     ratio_test = Tex("Ratio Test").scale(2).set_color_by_gradient(BLUE, GREEN)
     self.play(Write(ratio_test), run_time=1.5)
     self.wait(1)
+
     ratio_test_section_header = Title("Ratio Test")
     self.play(Transform(ratio_test, ratio_test_section_header), run_time=1.5)
-
     self.wait(1)
 
     # Ratio Test
@@ -23,9 +23,7 @@ def _ratio_test(self):
         Tex(r"If ", "$L$", "$=1$ ", "then no conclusion can be made"),
     ).arrange(DOWN, MED_SMALL_BUFF) #type: ignore
 
-
     conditions.scale(0.5).next_to(L,DOWN)
-
 
     conditions[0][1].set_color(TEAL)
     conditions[1][1].set_color(TEAL)
@@ -36,19 +34,19 @@ def _ratio_test(self):
     self.wait(1)
     self.play(u_n.animate.move_to(2.5 * DOWN).scale(0.7))
 
-    ratio_test = VGroup(
+    ratio_test_conditions = VGroup(
         Text("Ratio Test").scale(0.75).set_color(BLUE_A),
         L, conditions
     ).next_to(u_n, UP, buff=LARGE_BUFF)
 
-    ratio_test_box = SurroundingRectangle(ratio_test, GRAY_A, buff=MED_LARGE_BUFF)
-    self.play(GrowFromCenter(ratio_test))
+    ratio_test_box = SurroundingRectangle(ratio_test_conditions, GRAY_A, buff=MED_LARGE_BUFF)
+    self.play(GrowFromCenter(ratio_test_conditions))
     self.play(Create(ratio_test_box))
 
     self.wait(1)
 
     self.play(
-        Unwrite(ratio_test),
+        Unwrite(ratio_test_conditions),
         Uncreate(ratio_test_box)
     )       
     self.play(Unwrite(u_n))
@@ -87,7 +85,6 @@ def _ratio_test(self):
     )
     self.wait(2)
 
-
     ratio_test_lines[1][0].next_to(ratio_test_lines[0][2], DOWN)
     ratio_test_lines[1][1].next_to(ratio_test_lines[0][2], DOWN)
     ratio_test_lines[1][2].next_to(ratio_test_lines[0][2], DOWN)
@@ -101,7 +98,4 @@ def _ratio_test(self):
     self.wait(5)
     self.play(Unwrite(ratio_test_lines[0])) #type: ignore
     self.play(Unwrite(ratio_test_lines[1][2]))
-
-    self.play(Unwrite(ratio_test_section_header))
-
-
+    self.play(Unwrite(ratio_test))
