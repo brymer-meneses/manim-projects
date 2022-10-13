@@ -6,9 +6,16 @@ from conclusion import _conclusion
 
 class Presentation(Scene):
     def construct(self):
+        self.next_section(skip_animations=False)
         _intro(self)
+
+        self.next_section(skip_animations=False)
         _ratio_test(self)
+        
+        self.next_section(skip_animations=False)
         _limit_test(self)
+
+        self.next_section(skip_animations=False)
         _conclusion(self)
 
 if __name__ == "__main__":
