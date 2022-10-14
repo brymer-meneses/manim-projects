@@ -10,6 +10,7 @@ def _intro(self):
         Text("John Kenneth Herrera"),
         Text("Brymer Meneses"),
     )
+
     names.arrange(DOWN, buff=MED_SMALL_BUFF)  # type:ignore
     names.scale(0.4).next_to(group_name, DOWN, buff=MED_LARGE_BUFF)
 

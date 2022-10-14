@@ -6,13 +6,13 @@ from conclusion import _conclusion
 
 class Presentation(Scene):
     def construct(self):
-        self.next_section("Intro", skip_animations=False)
+        self.next_section("Intro", skip_animations=True)
         _intro(self)
 
-        self.next_section("Ratio Test", skip_animations=False)
+        self.next_section("Ratio Test", skip_animations=True)
         _ratio_test(self)
         
-        self.next_section("Limit Test", skip_animations=False)
+        self.next_section("Limit Test", skip_animations=True)
         _limit_test(self)
 
         self.next_section("Conclusion", skip_animations=False)
