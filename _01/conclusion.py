@@ -13,13 +13,13 @@ def _conclusion(self):
     self.wait(1)
 
     messages = VGroup( 
-            Tex("In conclusion, using the", " ratio test ", "and the", " limit test ", "we can conclude that the", " series,"),
+            Tex("In conclusion, using the", " ratio test ", "and the", " limit test", r",\\we can conclude that the", " series,"),
             MathTex(r"\sum_{n=1}^{\infty}\frac{2n}{2n!}"), #type: ignore
-            Tex("is", " convergent ", r"$\blacksquare$.")
+            Tex("is", " convergent", "."),
             )
     messages.scale(0.8)
 
-    messages.arrange(DOWN, buff=MED_LARGE_BUFF)
+    messages.arrange(DOWN, buff=0.8)
     messages[0][-1].set_color_by_gradient(BLUE, GREEN)
     messages[0][1].set_color(TEAL)
     messages[0][3].set_color(GREEN)
@@ -27,6 +27,7 @@ def _conclusion(self):
     messages[2][1].set_color(YELLOW)
     
     box = SurroundingRectangle(messages, buff=MED_SMALL_BUFF, color=WHITE)
+    messages.add(MathTex(r"\blacksquare").scale(0.5).next_to(box, DOWN, buff=0.5).align_on_border(RIGHT, buff=0.5))
 
     for message in messages:
         self.play(Write(message))

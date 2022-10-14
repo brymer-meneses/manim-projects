@@ -20,4 +20,4 @@ class Presentation(Scene):
 
 if __name__ == "__main__":
     import os
-    os.system("manim -pql main.py Presentation")
+    os.system("manim -qk main.py Presentation")
