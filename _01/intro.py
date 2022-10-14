@@ -1,6 +1,7 @@
 from manim import *
 
 def _intro(self):
+
     group_name = (
         Text("Problem 2A").move_to(UP).set_color_by_gradient(BLUE, GREEN).scale(1.5)
     ).scale(1.5)
@@ -10,6 +11,7 @@ def _intro(self):
         Text("John Kenneth Herrera"),
         Text("Brymer Meneses"),
     )
+
 
     names.arrange(DOWN, buff=MED_SMALL_BUFF)  # type:ignore
     names.scale(0.4).next_to(group_name, DOWN, buff=MED_LARGE_BUFF)
