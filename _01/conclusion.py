@@ -15,7 +15,7 @@ def _conclusion(self):
     messages = VGroup( 
             Tex("In conclusion, using the", " ratio test ", "and the", " limit test ", "we can conclude that the", " series,"),
             MathTex(r"\sum_{n=1}^{\infty}\frac{2n}{2n!}"), #type: ignore
-            Tex("is,", " convergent ", r"$\blacksquare$.")
+            Tex("is", " convergent ", r"$\blacksquare$.")
             )
     messages.scale(0.8)
 
