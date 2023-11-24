@@ -1,26 +1,17 @@
 import numpy as np
 
-def LagrangeInterpolation(f, a, b, step):
-  xs = np.array(range(a, b, step), float)
+def NewtonLagrangeInterpolation(f, x):
+  n = len(x)
+  d = np.zeros((n, n), dtype=float)
+  d[:, 0] = f(x)
+  for k in range(1, n):
+    for l in range(k, n):
+      d[l, k] = (d[l, k - 1] - d[l - 1, k - 1]) / (x[l] - x[l - k])
 
-  def lnk(x, k):
-    res = 1
-    for i, x_i in enumerate(xs):
-      if i == k: pass
-      res *= (x - x_i) / (xs[k] - x_i)
-    return res
+  def p(z):
+    v = d[n - 1, n - 1]
+    for k in range(1, n):
+      v = v * (z - x[n - 1 - k]) + d[n - 1 - k, n - 1 - k]
+    return v
 
-  for i in range(len(xs)):
-    print(lnk(1, i))
-
-  # def p(x):
-  #   res = 0
-  #   for k, node in enumerate(xs):
-  #     res += f(node) * lnk(x, k)
-  #   return res
-  # return p
-
-if __name__ == "__main__":
-  f = lambda x: x**2
-  p = LagrangeInterpolation(f, 1, 10, 1)
-  print(p(5))
+  return p

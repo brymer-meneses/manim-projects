@@ -4,40 +4,49 @@ import polyinterp as pi
 from manim import *
 from manim_slides import Slide
 
-
 class Presentation(Slide):
   def construct(self):
-    self.wait(1)
-    
-    self.next_slide()
+    self.play_blank_slide()
     self.play_introduction()
+    self.play_newton_lagrange_interpolation()
 
-    self.next_slide()
-    axes = Axes(
-      x_range=[-1, 1, 0.05],
-      y_range=[-1, 1, 0.05],
-      x_length=10,
-    )
-
-    self._show_function(lambda x: np.sin(x), axes)
-    # func = pi.NewtonLagrangeInterpolation(lambda x: np.sin(x), np.linspace(-1, 1, 10))
-    # print(func(0.5))
-    # self._show_function(func, axes)
-
-    self.next_slide()
+  def play_blank_slide(self):
     self.wait(1)
+    self.next_slide()
 
   def play_introduction(self):
-    text = Text("Introduction")
+    text = Text("Runge Phenomenon").set_color_by_gradient(BLUE, GREEN).scale(1.5)
     self.play(Write(text))
     self.wait(1)
+
+    self.next_slide()
     self.play(Unwrite(text))
+    self.wait(1)
 
-  def _show_function(self, f, axes):
-    graph = axes.plot(f, color=BLUE)
-    self.play(LaggedStart(Write(axes), Write(graph)))
+  def play_newton_lagrange_interpolation(self):
+    axes = Axes(x_range=[-10, 10])
+    func_graph = axes.plot(lambda x: np.sin(x), color=BLUE)
 
-if __name__ == "__main__":
-  func = pi.NewtonLagrangeInterpolation(lambda x: np.sin(x), np.linspace(-1, 1, 10))
-  print(func(0.5))
-    
+    self.play(LaggedStart(Create(axes), Create(func_graph), lag_ratio=0.5))
+    self.wait(1)
+
+    self.next_slide()
+    approx_graph = axes.plot(
+      pi.NewtonLagrangeInterpolation(
+        lambda x: np.sin(x), np.linspace(-10, 10, 10)
+      ),
+      color=GREEN,
+    )
+    self.play(LaggedStart(Create(approx_graph), lag_ratio=0.5))
+    self.wait(1)
+
+    self.next_slide()
+    self.play(
+      LaggedStart(
+        Uncreate(approx_graph),
+        Uncreate(func_graph),
+        Uncreate(axes),
+        lag_ratio=0.5,
+      )
+    )
+    self.wait(1)
