@@ -1,0 +1,2 @@
+# This file is used internally by FFMPEG.
+file 'file:/Users/brymer-meneses/College/cmsc-117/manim-projects/_2023/cmsc117_runge_phenomenon/media/videos/main/2160p60/partial_movie_files/Presentation/139003253_345352296_631829896.mp4'

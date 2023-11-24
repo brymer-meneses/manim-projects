@@ -1,0 +1,7 @@
+# This file is used internally by FFMPEG.
+file 'file:/Users/brymer-meneses/College/cmsc-117/manim-projects/_2023/cmsc117_runge_phenomenon/media/videos/main/480p15/partial_movie_files/Presentation/1185818338_2268332985_631829896.mp4'
+file 'file:/Users/brymer-meneses/College/cmsc-117/manim-projects/_2023/cmsc117_runge_phenomenon/media/videos/main/480p15/partial_movie_files/Presentation/1185818338_2343960113_4131132508.mp4'
+file 'file:/Users/brymer-meneses/College/cmsc-117/manim-projects/_2023/cmsc117_runge_phenomenon/media/videos/main/480p15/partial_movie_files/Presentation/624642324_3890345977_2838382168.mp4'
+file 'file:/Users/brymer-meneses/College/cmsc-117/manim-projects/_2023/cmsc117_runge_phenomenon/media/videos/main/480p15/partial_movie_files/Presentation/624642324_2014459029_3569362928.mp4'
+file 'file:/Users/brymer-meneses/College/cmsc-117/manim-projects/_2023/cmsc117_runge_phenomenon/media/videos/main/480p15/partial_movie_files/Presentation/624642324_676512708_574630669.mp4'
+file 'file:/Users/brymer-meneses/College/cmsc-117/manim-projects/_2023/cmsc117_runge_phenomenon/media/videos/main/480p15/partial_movie_files/Presentation/624642324_3890345977_671459711.mp4'
