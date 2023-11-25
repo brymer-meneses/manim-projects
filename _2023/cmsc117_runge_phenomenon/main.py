@@ -26,31 +26,61 @@ class Presentation(Slide):
     self.wait(0.1)
 
   def play_newton_lagrange_interpolation(self):
-    axes = Axes(x_range=[-10, 10])
-    f = lambda x: np.sin(x)
+    axes = Axes(x_range=[-5, 5], y_range=[-5, 5])
+    f = lambda x: 1/(1 + x ** 2)
     f_graph = axes.plot(f, color=BLUE)
 
     self.play(Create(axes), Create(f_graph, run_time=1))
     self.wait(0.1)
 
     self.next_slide()
-    for n in [5, 10, 15, 20, 25]:
+
+    previous_num = None
+    previous_points = None
+    previous_graph = None
+    previous_err  = None
+
+    for n in [5, 10, 15, 20, 25, 30, 100, 200, 500]:
       nodes = np.linspace(-10, 10, n)
-      points = VGroup(*[Dot(axes.coords_to_point(x, f(x))) for x in nodes])
+
+      num = MathTex(f"n = {n}").move_to(0.8 * axes.get_corner(UP + RIGHT))
+      err = MathTex(f"|| f(x) - p_{{{n-1}}} || = {0}").next_to(num, DOWN)
+
+      points = VGroup(*[Dot(axes.coords_to_point(x, f(x)), color=GRAY) for x in nodes])
       approx_graph = axes.plot(
         NewtonLagrangeInterpolation(f, nodes),
         color=GREEN,
       )
 
-      self.play(Succession(Create(points), Create(approx_graph)))
-      self.wait(0.1)
+      if previous_graph is None:
+        self.play(Succession(Write(num), 
+                             Write(err), 
+                             Create(points), 
+                             Create(approx_graph)))
+        self.wait(0.1)
+
+        previous_num = num
+        previous_points = points
+        previous_graph = approx_graph
+        previous_err = err
+
+      else:
+        self.play(
+          Transform(previous_num, num),
+          Transform(previous_err, err),
+          Transform(previous_points, points),
+          Transform(previous_graph, approx_graph),
+          run_time=0.5
+        )
 
       self.next_slide()
-      self.play(
-        FadeOut(points),
-        Uncreate(approx_graph),
-      )
-      self.wait(1)
+      self.wait(0.1)
+
+    self.play(
+      Unwrite(previous_num),
+      Uncreate(previous_points),
+      Uncreate(previous_graph),
+    )
     
     self.play(
       LaggedStart(
