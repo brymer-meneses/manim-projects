@@ -26,8 +26,8 @@ class Presentation(Slide):
     self.wait(0.1)
 
   def play_newton_lagrange_interpolation(self):
-    axes = Axes(x_range=[-5, 5], y_range=[-5, 5])
-    f = lambda x: 1/(1 + x ** 2)
+    axes = Axes(x_range=[-2, 2], y_range=[-2, 2])
+    f = lambda x: 1/(1 + 25 * x ** 2)
     f_graph = axes.plot(f, color=BLUE)
 
     self.play(Create(axes), Create(f_graph, run_time=1))
@@ -40,8 +40,8 @@ class Presentation(Slide):
     previous_graph = None
     previous_err  = None
 
-    for n in [5, 10, 15, 20, 25, 30, 100, 200, 500]:
-      nodes = np.linspace(-10, 10, n)
+    for n in range(2, 20):
+      nodes = np.linspace(-1, 1, n)
 
       num = MathTex(f"n = {n}").move_to(0.8 * axes.get_corner(UP + RIGHT))
       err = MathTex(f"|| f(x) - p_{{{n-1}}} || = {0}").next_to(num, DOWN)
