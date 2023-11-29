@@ -38,29 +38,50 @@ class Presentation(Slide):
     f_graph = axes.plot(f, color=BLUE)
     p_graph = axes.plot(NewtonLagrangeInterpolation(f, np.linspace(-np.pi, np.pi, 4)), color=RED)
 
-    self.next_slide()
-    self.play(LaggedStart(
-      Create(title),
-      Write(s1),
-      Create(axes),
-      Create(f_graph, run_time=1),
-      lag_ratio=0.5
-      ))
+    self.play(
+      LaggedStart(
+        Write(title),
+        Write(s1),
+        Create(axes),
+        Create(f_graph, run_time=1),
+        lag_ratio=0.5
+      )
+    )
     self.wait(0.1)
 
     self.next_slide()
-    self.play(LaggedStart(
-      Write(s2)),
-      Create(p_graph, run_time=1),
-      lag_ratio=0.5)
+    self.play(
+        LaggedStart(
+          Write(s2),
+          Create(p_graph, run_time=1),
+          lag_ratio=0.5
+        )
+      )
     self.wait(0.1)
 
     self.next_slide()
-    self.play(LaggedStart(Write(s3)), lag_ratio=0.5)
+    self.play(
+      LaggedStart(
+        Write(s3),
+        lag_ratio=0.5
+        )
+      )
     self.wait(0.1)
     
     self.next_slide()
-    self.play(LaggedStart(Uncreate(axes), Uncreate(f_graph, p_graph, run_time=1), Unwrite(s1, s2, s3), Uncreate(title)), lag_ratio=0.5)
+    self.play(
+      LaggedStart(
+        Uncreate(axes),
+        Uncreate(f_graph),
+        Uncreate(p_graph),
+        Unwrite(s3),
+        Unwrite(s2),
+        Unwrite(s1),
+        Unwrite(title),
+        lag_ratio=0.5
+      ),
+      run_time=1
+    )
     self.wait(0.1)
 
   def play_polynomial_interpolation_problem(self):
@@ -81,7 +102,7 @@ class Presentation(Slide):
 
     self.next_slide()
 
-    for n in range(2, 30):
+    for n in range(2, 12):
       nodes = np.linspace(-1, 1, n)
 
       num = MathTex(f"n = {n}").move_to(0.8 * axes.get_corner(UP + RIGHT))
@@ -98,15 +119,19 @@ class Presentation(Slide):
         self.bring_to_front(err)
 
       if previous_graph is None:
-        self.play(Succession(Write(num), 
-                             Write(err), 
-                             Create(points), 
-                             Create(approx_graph)))
+        self.play(
+          LaggedStart(
+            Write(num), 
+            Write(err),
+            Create(points),
+            Create(approx_graph),
+            lag_ratio=0.5
+          )
+        )
         previous_num = num
         previous_points = points
         previous_graph = approx_graph
         previous_err = err
-
       else:
         self.play(
           Transform(previous_num, num),
@@ -123,6 +148,7 @@ class Presentation(Slide):
       Unwrite(previous_num),
       Uncreate(previous_points),
       Uncreate(previous_graph),
+      Uncreate(previous_err),
     )
     
     self.play(
