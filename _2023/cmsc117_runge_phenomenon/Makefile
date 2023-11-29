@@ -1,4 +1,4 @@
-.PHONY: all build run
+.PHONY: all build run clean
 
 QUALITY ?= l
 
@@ -9,3 +9,6 @@ run: build
 
 build: main.py
 	manim $< Presentation -q$(QUALITY)
+
+clean:
+	rm -rf __pycache__ media slides
