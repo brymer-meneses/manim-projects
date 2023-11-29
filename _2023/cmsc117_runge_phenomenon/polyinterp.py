@@ -1,8 +1,16 @@
 import numpy as np
 
 def supnorm(f, a, b, numnodes):
-  x = np.linspace(a,b, numnodes)
-  return np.max(np.abs(f(x)))
+  xs = np.linspace(a,b, numnodes)
+  absfx = 0
+  x_max = a
+  for x in xs:
+    value = np.abs(f(x))
+    if absfx < value:
+      x_max = x
+      absfx = value
+  return x_max, absfx
+
 
 def NewtonLagrangeInterpolation(f, x):
   n = len(x)

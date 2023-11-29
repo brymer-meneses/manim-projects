@@ -33,7 +33,7 @@ class Presentation(Slide, ZoomedScene):
     s2 = Tex("there exists $n = n(f, \epsilon) > 0$ and a polynomial $p_n \in \mathbb{R}_{n}[x]$ of degree $n$").next_to(s1, DOWN).scale(0.8)
     s3 = Tex("such that $||f - p_n|| < \epsilon$.").next_to(s2, DOWN).scale(0.8)
 
-    axes = Axes(x_range=[-np.pi + 0.4, np.pi + 0.4], y_range=[-1, 1]).scale(0.6).next_to(s3, DOWN)
+    axes = Axes(x_range=[-np.pi + 0.4, np.pi + 0.4], y_range=[-1, 1], tips=False).scale(0.6).next_to(s3, DOWN)
     f = lambda x: np.sin(x)
     f_graph = axes.plot(f, color=BLUE)
     p_graph = axes.plot(polyinterp.NewtonLagrangeInterpolation(f, np.linspace(-np.pi, np.pi, 4)), color=RED)
@@ -88,7 +88,7 @@ class Presentation(Slide, ZoomedScene):
     pass
 
   def play_newton_lagrange_interpolation(self):
-    axes = Axes(x_range=[-2, 2], y_range=[-2, 2])
+    axes = Axes(x_range=[-2, 2], y_range=[-2, 2], tips=False)
     f = lambda x: 1/(1 + 25 * x ** 2)
     f_graph = axes.plot(f, color=BLUE)
 
@@ -107,11 +107,7 @@ class Presentation(Slide, ZoomedScene):
       color=GRAY
     )
 
-    previous_num = None
-    previous_points = None
-    previous_graph = None
-    previous_err  = None
-    previous_area = None
+    previous = {}
 
     self.play(Create(axes), 
               Create(start_line), 
@@ -122,69 +118,80 @@ class Presentation(Slide, ZoomedScene):
 
     self.next_slide()
 
-
     for n in range(2, 12):
       nodes = np.linspace(-1, 1, n)
 
       lagrange_func = polyinterp.NewtonLagrangeInterpolation(f, nodes)
-      supnorm = polyinterp.supnorm(lambda x: f(x) - lagrange_func(x), -1, 1, 1000)
+      x_max, supnorm = polyinterp.supnorm(lambda x: f(x) - lagrange_func(x), -1, 1, 1000)
 
       num = MathTex(f"n = {n}").move_to(0.8 * axes.get_corner(UP + RIGHT)).scale(0.8)
-      err = MathTex(f"|| f(x) - p_{{{n-1}}} || = {supnorm:0.5}").next_to(num, DOWN).scale(0.8)
+      bg = BackgroundRectangle(num, color=BLACK, fill_opacity=0.5)
 
-      points = VGroup(*[Dot(axes.coords_to_point(x, f(x)), color=GRAY) for x in nodes])
-      approx_graph = axes.plot(lagrange_func, color=GREEN)
-      area = axes.get_area(approx_graph, [0.5, 0.94], bounded_graph=f_graph, color=YELLOW, opacity=0.8)
 
-      if n == 2:
-        self.bring_to_front(num)
-        self.bring_to_front(err)
+      points = VGroup(*[Dot(axes.coords_to_point(x, f(x)), color=WHITE, radius=0.05) for x in nodes])
+      approx_graph = axes.plot(lagrange_func, color=ORANGE.interpolate(RED, (n-2)/9))
 
-      if previous_graph is None:
-        self.play(Write(num))
-        self.wait(0.1)
+      for elem in [num, bg]:
+        elem.set_z_index(approx_graph.z_index + 1)
 
+      line = DashedLine(
+        start=axes.coords_to_point(x_max, f(x_max)),
+        end=axes.coords_to_point(x_max, lagrange_func(x_max)))
+      brace = Brace(line, direction=RIGHT)
+      err = MathTex(f"{supnorm:0.5}").next_to(brace, RIGHT)
+
+      if previous == {}:
+        self.next_slide()
         self.play(
           LaggedStart(
-            Write(err),
+            Create(bg),
+            Write(num),
             Create(points),
-            Create(area),
             Create(approx_graph),
-            Create(area),
             lag_ratio=0.5
           ),
           run_time=0.75
         )
-        previous_num = num
-        previous_points = points
-        previous_graph = approx_graph
-        previous_err = err
-        previous_area = area
+        
+        previous["num"] = num
+        previous["points"] = points
+        previous["graph"] = approx_graph
       else:
         self.play(
-          Transform(previous_num, num),
-          Transform(previous_err, err),
-          Transform(previous_points, points),
-          Transform(previous_graph, approx_graph),
-          Transform(previous_area, area),
+          Transform(previous["num"], num),
+          Transform(previous["points"], points),
+          Transform(previous["graph"],  approx_graph),
           run_time=0.5
         )
 
+
+      self.play(LaggedStart(
+        Create(line),
+        Write(err),
+        Create(brace),
+        ), run_time=0.2)
       self.wait(0.1)
+
       self.next_slide()
+      self.play(
+        Uncreate(line),
+        Uncreate(brace),
+        Unwrite(err),
+        run_time=0.2
+        )
 
     self.play(
-      Unwrite(previous_num),
-      Uncreate(previous_points),
-      Uncreate(previous_graph),
-      Uncreate(previous_err),
-      Uncreate(previous_area),
+      Unwrite(previous["num"]),
+      Uncreate(previous["points"]),
+      Uncreate(previous["graph"]),
     )
     
     self.play(
       LaggedStart(
         Uncreate(f_graph),
         Uncreate(axes),
+        Uncreate(start_line),
+        Uncreate(end_line),
         Uncreate(labels),
         lag_ratio=0.5,
       )
