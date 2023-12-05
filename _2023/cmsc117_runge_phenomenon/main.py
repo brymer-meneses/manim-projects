@@ -155,10 +155,27 @@ class Presentation(Slide, ZoomedScene):
     f_graph = axes.plot(f, color=BLUE)
     p_graph = axes.plot(polyinterp.NewtonLagrangeInterpolation(f, np.linspace(-np.pi, np.pi, 4)), color=RED)
 
+    start_line = DashedLine(
+      dash_length=0.1,
+      start=axes.coords_to_point(-1, -1),
+      end=axes.coords_to_point(-1, 1),
+      color=GRAY
+    )
+    end_line = DashedLine(
+      dash_length=0.1,
+      start=axes.coords_to_point(1, -1),
+      end=axes.coords_to_point(1, 1),
+      color=GRAY
+    )
+
     self.play(
       LaggedStart(
         Write(title),
         Write(s1),
+        Create(start_line),
+        Create(end_line),
+        Create(MathTex("a").next_to(start_line, DOWN).scale(0.6)),
+        Create(MathTex("b").next_to(end_line, DOWN).scale(0.6)),
         Create(axes),
         Create(f_graph, run_time=1),
         lag_ratio=0.5
@@ -332,17 +349,17 @@ def NewtonLagrangeInterpolation(f, x):
 
     start_line = DashedLine(
       dash_length=0.1,
+      start=axes.coords_to_point(-1, -2),
+      end=axes.coords_to_point(-1, 2),
+      color=GRAY
+    )
+    end_line = DashedLine(
+      dash_length=0.1,
       start=axes.coords_to_point(1, -2),
       end=axes.coords_to_point(1, 2),
       color=GRAY,
     )
 
-    end_line = DashedLine(
-      dash_length=0.1,
-      start=axes.coords_to_point(-1, -2),
-      end=axes.coords_to_point(-1, 2),
-      color=GRAY
-    )
 
     previous = {}
 
@@ -496,14 +513,14 @@ def NewtonLagrangeInterpolation(f, x):
 
     start_line = DashedLine(
       dash_length=0.1,
-      start=axes.coords_to_point(1, -1),
-      end=axes.coords_to_point(1, 1),
+      start=axes.coords_to_point(-1, -1),
+      end=axes.coords_to_point(-1, 1),
       color=GRAY
     )
     end_line = DashedLine(
       dash_length=0.1,
-      start=axes.coords_to_point(-1, -1),
-      end=axes.coords_to_point(-1, 1),
+      start=axes.coords_to_point(1, -1),
+      end=axes.coords_to_point(1, 1),
       color=GRAY
     )
 
@@ -606,10 +623,14 @@ def NewtonLagrangeInterpolation(f, x):
     bg.set_z_index(text.z_index - 1)
     cat.set_z_index(bg.z_index - 1)
 
-    self.play(GrowFromCenter(cat))
-    self.wait(0.1)
     self.next_slide()
 
     self.play(Write(text), Create(bg))
+    self.wait(0.1)
+    self.next_slide()
+
+    self.play(GrowFromCenter(cat))
+    self.wait(0.1)
+    self.next_slide()
     
     self.clear_all()
