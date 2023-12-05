@@ -55,7 +55,7 @@ class Presentation(Slide, ZoomedScene):
     axes.next_to(text, DOWN, buff=LARGE_BUFF)
     labels = axes.get_axis_labels(
       x_label=Tex("$t$"),
-      y_label=Tex("$T(t)$", color=BLUE)
+      y_label=Tex("$T$", color=BLUE)
     )
 
     xs = np.linspace(1, 4, 3)
@@ -114,13 +114,13 @@ class Presentation(Slide, ZoomedScene):
     )
     self.wait(0.1)
 
-    err = axes.get_area(approx_graph, [1, 4], bounded_graph=func_graph, color=GRAY)
+    err = axes.get_area(approx_graph, [1, 4], bounded_graph=func_graph, color=YELLOW, opacity=0.5)
     self.next_slide()
     self.play(
       Transform(
         text,
         MathTex(
-          r"|| T(t) - p_n(t) || < \epsilon",
+          r"||T(t) - p_n(t)|| < \epsilon",
           substrings_to_isolate=["T(t)", "p_n(t)"],
           tex_to_color_map={"T(t)": BLUE, "p_n(t)": RED},
         ).move_to(text)),
@@ -141,12 +141,12 @@ class Presentation(Slide, ZoomedScene):
       tex_to_color_map={"$f$": BLUE},
     ).next_to(title, DOWN).scale(0.8)
     s2 = Tex(
-      "there exists $n = n($$f$ $, \epsilon) > 0$ and a polynomial $p_n$ $\in \mathbb{R}_{n}[x]$ of degree $n$",
+      "there exists $n = n($$f$$, \epsilon) > 0$ and a polynomial $p_n$ $\in \mathbb{R}_{n}[x]$ of degree $n$",
       substrings_to_isolate=["$f$", "$p_n$"],
       tex_to_color_map={"$f$": BLUE, "$p_n$": RED},
     ).next_to(s1, DOWN).scale(0.8)
     s3 = Tex(
-      "such that $||$ $f$ $-$ $p_n$ $ || < \epsilon$.",
+      "such that $||$$f$ $-$ $p_n$$|| < \epsilon$.",
       substrings_to_isolate=["$f$", "$p_n$"],
       tex_to_color_map={"$f$": BLUE, "$p_n$": RED},
     ).next_to(s2, DOWN).scale(0.8)
@@ -222,7 +222,6 @@ $\in \mathbb{R}_n[x]$ of degree $n$ such that $p_n(x_k)$ $ = $ $f(x_k)$ for all 
   
   def play_lagrange_interpolation(self):
     title = Title("Lagrange Polynomial")
-
 
     text = Tex(
 """Given a continuous function $f$ $: [a,b] \\to \mathbb{R}$ and $n$
@@ -398,9 +397,6 @@ def NewtonLagrangeInterpolation(f, x):
     ).arrange(DOWN).scale(0.8)
 
     self.play(Write(text))
-
-    self.wait(0.1)
-    self.next_slide()
     self.play(text[1][1].animate.set_color_by_gradient(BLUE, GREEN), run_time=0.5)
 
     self.next_slide()
@@ -438,8 +434,7 @@ def NewtonLagrangeInterpolation(f, x):
 
     self.next_slide()
     self.play(Unwrite(function[0]))
-    self.play(function[1].animate.to_edge(LEFT, buff=MED_LARGE_BUFF))
-
+    self.play(function[1].animate.to_corner(UP+LEFT, buff=MED_LARGE_BUFF))
 
     axes = Axes(x_range=[-2, 2], y_range=[-1, 1.5], tips=False).scale(0.8)
     f = lambda x: 1/(1 + 25 * x ** 2)
