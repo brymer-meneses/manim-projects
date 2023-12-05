@@ -12,3 +12,6 @@ build: main.py
 
 clean:
 	rm -rf __pycache__ media slides
+
+play:
+	manim-slides Presentation
