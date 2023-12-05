@@ -5,7 +5,6 @@ from manim_slides import Slide
 
 import polyinterp
 
-
 class Presentation(Slide, ZoomedScene):
   def clear_all(self, except_mobjects=[]):
     animations = []
@@ -28,20 +27,21 @@ class Presentation(Slide, ZoomedScene):
     self.play_introduction()
     self.play_polynomial_approximation()
     self.play_polynomial_interpolation_problem()
-    # self.play_lagrange_interpolation()
+    self.play_lagrange_interpolation()
     self.play_runge_phenomenon()
     self.play_mitigation()
+    self.play_ending()
     
   def play_introduction(self):
     func = lambda t: 2 * np.sin(t) + 2
 
     text = VGroup(
-        Tex("Suppose we wanted to model the"),
         Tex(
-          "temperature $T$ of a cat at any time $t$.",
-          substrings_to_isolate=["$T$"],
-          tex_to_color_map={"T": BLUE}
+          "Suppose we wanted to approximate a function $f$",
+          substrings_to_isolate=["$f$"],
+          tex_to_color_map={"$f$": BLUE},
         ),
+        Tex("for any value $x$ given the following points:"),
       ).arrange(DOWN).scale(1.2)
     
     self.next_slide()
@@ -54,8 +54,8 @@ class Presentation(Slide, ZoomedScene):
     axes = Axes(x_range=[-2, 5], y_range=[-2, 5]).scale(0.7).set_opacity(0.5)
     axes.next_to(text, DOWN, buff=LARGE_BUFF)
     labels = axes.get_axis_labels(
-      x_label=Tex("$t$"),
-      y_label=Tex("$T$", color=BLUE)
+      x_label=Tex("$x$"),
+      y_label=Tex("$f(x)$", color=BLUE)
     )
 
     xs = np.linspace(1, 4, 3)
@@ -87,9 +87,9 @@ class Presentation(Slide, ZoomedScene):
       Transform(
         text,
         MathTex(
-          r"T(t) = ??",
-          substrings_to_isolate=["T(t)"],
-          tex_to_color_map={"T(t)": BLUE},
+          r"f(x) = \; ??",
+          substrings_to_isolate=["f(x)"],
+          tex_to_color_map={"f(x)": BLUE},
         ).move_to(text)
       ),
       Create(func_graph),
@@ -104,9 +104,9 @@ class Presentation(Slide, ZoomedScene):
       Transform(
         text,
         MathTex(
-          r"p_n(t) \approx T(t)",
-          substrings_to_isolate=["T(t)", "p_n(t)"],
-          tex_to_color_map={"T(t)": BLUE, "p_n(t)": RED},
+          r"p_n(x) \approx f(x)",
+          substrings_to_isolate=["f(x)", "p_n(x)"],
+          tex_to_color_map={"f(x)": BLUE, "p_n(x)": RED},
         ).move_to(text)
       ),
       Create(approx_graph),
@@ -114,15 +114,15 @@ class Presentation(Slide, ZoomedScene):
     )
     self.wait(0.1)
 
-    err = axes.get_area(approx_graph, [1, 4], bounded_graph=func_graph, color=YELLOW, opacity=0.5)
+    err = axes.get_area(approx_graph, [1, 4], bounded_graph=func_graph, color=YELLOW, opacity=0.2)
     self.next_slide()
     self.play(
       Transform(
         text,
         MathTex(
-          r"||T(t) - p_n(t)|| < \epsilon",
-          substrings_to_isolate=["T(t)", "p_n(t)"],
-          tex_to_color_map={"T(t)": BLUE, "p_n(t)": RED},
+          r"||f - p_n|| < \epsilon",
+          substrings_to_isolate=["f", "p_n"],
+          tex_to_color_map={"f": BLUE, "p_n": RED},
         ).move_to(text)),
       FadeIn(err),
       run_time=1
@@ -146,7 +146,7 @@ class Presentation(Slide, ZoomedScene):
       tex_to_color_map={"$f$": BLUE, "$p_n$": RED},
     ).next_to(s1, DOWN).scale(0.8)
     s3 = Tex(
-      "such that $||$$f$ $-$ $p_n$$|| < \epsilon$.",
+      "such that $||$$f$ $-$ $p_n$$||_{\infty} < \epsilon$.",
       substrings_to_isolate=["$f$", "$p_n$"],
       tex_to_color_map={"$f$": BLUE, "$p_n$": RED},
     ).next_to(s2, DOWN).scale(0.8)
@@ -188,7 +188,6 @@ class Presentation(Slide, ZoomedScene):
 
   def play_polynomial_interpolation_problem(self):
     title = Title("Polynomial Interpolation Problem")
-    title = Title("Polynomial Interpolation Problem")
     
     text = Tex(
 """Given a continuous function $f$ $ : [a,b] \\to \mathbb{R}$ and $n$
@@ -211,8 +210,29 @@ $\in \mathbb{R}_n[x]$ of degree $n$ such that $p_n(x_k)$ $ = $ $f(x_k)$ for all 
         Write(text),
         Create(axes),
         Create(func_graph, run_time=1),
-        Create(points, run_time=1),
-        Create(approx_graph, run_time=1),
+        lag_ratio=0.5
+      )
+    )
+    self.wait(0.1)
+    
+    self.next_slide()
+    self.play(
+      LaggedStart(
+        Create(points),
+        lag_ratio=0.5
+      )
+    )
+    self.wait(0.1)
+
+    self.next_slide()
+    for point in points:
+      self.play(Flash(point))
+      self.wait(0.1)
+      self.next_slide()
+    
+    self.play(
+      LaggedStart(
+        Create(approx_graph),
         lag_ratio=0.5
       )
     )
@@ -233,8 +253,8 @@ $L_{f, n}$ $\in \mathbb{R}_n[x]$ is defined by""",
 
     lagrange_poly = MathTex(
       r"L_{f, n}(x) = \sum_{k = 0}^n f(x_k) \prod_{\substack{j = 0 \\ j \neq k}}^n \frac{x - x_j}{x_k - x_j}",
-      substrings_to_isolate=["f", "L_{f, n}"],
-      tex_to_color_map={"f": BLUE, "L_{f, n}": RED}
+      substrings_to_isolate=[r"\frac{x - x_j}{x_k - x_j}", "f", "L_{f, n}"],
+      tex_to_color_map={"f": BLUE, "L_{f, n}": RED, r"\frac{x - x_j}{x_k - x_j}": WHITE}
     ).next_to(text, DOWN)
     self.play(
       LaggedStart(
@@ -287,7 +307,24 @@ def NewtonLagrangeInterpolation(f, x):
     self.play_lagrange_graph()
 
   def play_lagrange_graph(self):
-    axes = Axes(x_range=[-2, 2], y_range=[-2, 2], tips=False)
+    function = VGroup(
+      Tex("Consider the function"),
+      MathTex(r"f(x)=e^{-x^2}",
+        substrings_to_isolate=["f"],
+        tex_to_color_map={"f": BLUE}
+      ),
+    ).arrange(DOWN).set_z_index(110)
+
+    axes = Axes(x_range=[-2, 2], y_range=[-2, 2], tips=False).scale(0.8)
+
+    self.play(Write(function))
+    self.next_slide()
+    self.play(Unwrite(function[0]))
+    self.play(function[1].animate.move_to(0.8 * axes.get_corner(UP + LEFT)).scale(.6))
+    bg1 = BackgroundRectangle(function[1], fill_opacity=0.5).set_z_index(100)
+
+    self.play(FadeIn(bg1))
+    
     f = lambda x: np.exp(-x**2)
     f_graph = axes.plot(f, color=BLUE)
 
@@ -297,8 +334,9 @@ def NewtonLagrangeInterpolation(f, x):
       dash_length=0.1,
       start=axes.coords_to_point(1, -2),
       end=axes.coords_to_point(1, 2),
-      color=GRAY
+      color=GRAY,
     )
+
     end_line = DashedLine(
       dash_length=0.1,
       start=axes.coords_to_point(-1, -2),
@@ -311,6 +349,8 @@ def NewtonLagrangeInterpolation(f, x):
     self.play(Create(axes), 
               Create(start_line), 
               Create(end_line), 
+              Create(MathTex("-1").next_to(start_line, DOWN).scale(0.6)),
+              Create(MathTex("1").next_to(end_line, DOWN).scale(0.6)),
               Create(labels), 
               Create(f_graph, run_time=1))
     self.wait(0.1)
@@ -327,7 +367,7 @@ def NewtonLagrangeInterpolation(f, x):
       err = MathTex(
         f"||f - L_{{f, n}}||_\infty = {supnorm:.5f}",
         substrings_to_isolate=["f", "L_{f, n}", "\infty"],
-        tex_to_color_map={"f": BLUE, "L_{f, n}": RED}
+        tex_to_color_map={"f": BLUE, "L_{f, n}": RED, "\infty": WHITE}
       ).next_to(num, DOWN).scale(0.6)
       bg = BackgroundRectangle(VGroup(num,err), color=BLACK, fill_opacity=0.5)
 
@@ -392,51 +432,60 @@ def NewtonLagrangeInterpolation(f, x):
 
   def play_runge_phenomenon(self):
     text = VGroup(
-      Tex(r"It can be shown that for equally spaced nodes including the endpoints, \\ $||f - L_{f,n}||_\infty \to \infty$ as $n \to \infty$. "),
+      Tex("Unfortunately, the answer is no!").scale(1.4).set_color_by_gradient(ORANGE, RED),
+      Tex(r"It can be shown that for equally spaced nodes including the endpoints, \\ a function $f$ may result to $||f - L_{f,n}||_\infty \to \infty$ as $n \to \infty$. "),
       Tex(r"This is called the ", "Runge's Phenonenon", "!")
     ).arrange(DOWN).scale(0.8)
 
     self.play(Write(text))
-    self.play(text[1][1].animate.set_color_by_gradient(BLUE, GREEN), run_time=0.5)
+    self.play(text[2][1].animate.set_color_by_gradient(BLUE, GREEN), run_time=0.5)
 
     self.next_slide()
     self.play(
       Succession(
         Unwrite(text[0]),
-        LaggedStart(text[1].animate.to_edge(UP))
+        Unwrite(text[1]),
+        LaggedStart(text[2].animate.to_edge(UP))
       )
     )
 
-    runge_image = ImageMobject("assets/runge.jpeg").next_to(text[1], DOWN)
+    runge_image = ImageMobject("assets/runge.jpeg").next_to(text[2], DOWN, buff=MED_SMALL_BUFF)
+    runge_name = Tex("Carl David Tolmé Runge (1856 - 1927)").next_to(runge_image, DOWN)
 
-    self.play(GrowFromCenter(runge_image))
+    self.play(
+      LaggedStart(
+        GrowFromCenter(runge_image),
+        Write(runge_name),
+        lag_ratio=0.5
+      )
+    )
     self.wait(0.1)
 
     self.next_slide()
     self.play(
       Unwrite(text),
+      Unwrite(runge_name),
       FadeOut(runge_image),
-      # Unwrite(text[1][0]),
-      # Transform(text[1][1], title),
-      # Unwrite(text[1][2]),
       run_time=0.5
     )
 
     function = VGroup(
       Tex("Consider the function"),
-      MathTex(r"f(x)=\frac{1}{1 + 25x^2}",
-        substrings_to_isolate=["x"],
-        tex_to_color_map={"x": YELLOW_E}
-      ),
-    ).arrange(DOWN)
+      MathTex(r"f", r"(x)=\frac{1}{1 + 25x^2}"),
+    ).arrange(DOWN).set_z_index(110)
 
-    self.play(Write(function))
-
-    self.next_slide()
-    self.play(Unwrite(function[0]))
-    self.play(function[1].animate.to_corner(UP+LEFT, buff=MED_LARGE_BUFF))
+    function[1][0].set_color(BLUE)
 
     axes = Axes(x_range=[-2, 2], y_range=[-1, 1.5], tips=False).scale(0.8)
+
+    self.play(Write(function))
+    self.next_slide()
+    self.play(Unwrite(function[0]))
+    self.play(function[1].animate.move_to(0.8 * axes.get_corner(UP + LEFT)).scale(.6))
+    bg1 = BackgroundRectangle(function[1], fill_opacity=0.5).set_z_index(100)
+
+    self.play(FadeIn(bg1))
+
     f = lambda x: 1/(1 + 25 * x ** 2)
     f_graph = axes.plot(f, color=BLUE)
 
@@ -444,14 +493,14 @@ def NewtonLagrangeInterpolation(f, x):
 
     start_line = DashedLine(
       dash_length=0.1,
-      start=axes.coords_to_point(1, -2),
-      end=axes.coords_to_point(1, 2),
+      start=axes.coords_to_point(1, -1),
+      end=axes.coords_to_point(1, 1),
       color=GRAY
     )
     end_line = DashedLine(
       dash_length=0.1,
-      start=axes.coords_to_point(-1, -2),
-      end=axes.coords_to_point(-1, 2),
+      start=axes.coords_to_point(-1, -1),
+      end=axes.coords_to_point(-1, 1),
       color=GRAY
     )
 
@@ -460,6 +509,8 @@ def NewtonLagrangeInterpolation(f, x):
     self.play(Create(axes), 
               Create(start_line), 
               Create(end_line), 
+              Create(MathTex("-1").next_to(start_line, DOWN).scale(0.6)),
+              Create(MathTex("1").next_to(end_line, DOWN).scale(0.6)),
               Create(labels), 
               Create(f_graph, run_time=1))
     self.wait(0.1)
@@ -476,7 +527,7 @@ def NewtonLagrangeInterpolation(f, x):
       err = MathTex(
         f"||f - L_{{f, n}}||_\infty = {supnorm:.5f}",
         substrings_to_isolate=["f", "L_{f, n}", "\infty"],
-        tex_to_color_map={"f": BLUE, "L_{f, n}": ORANGE.interpolate(RED, (n-2)/9)}
+        tex_to_color_map={"f": BLUE, "L_{f, n}": ORANGE.interpolate(RED, (n-2)/9), "\infty": WHITE}
       ).next_to(num, DOWN).scale(0.6)
       bg = BackgroundRectangle(VGroup(num, err), color=BLACK, fill_opacity=0.5)
 
@@ -527,11 +578,13 @@ def NewtonLagrangeInterpolation(f, x):
     self.clear_all()
 
   def play_mitigation(self):
-    text = Tex("So how can we mitigate this?")
+    text = Tex("So how can we mitigate this?").scale(1.2)
     blist = BulletedList(
-      "Choose different interpolation points",
-      "Use piecewise polynomials",
+      " Choose different interpolation points",
+      " Use piecewise polynomials",
     )
+
+    VGroup(text, blist).arrange(DOWN, buff=MED_LARGE_BUFF).center()
 
     self.play(Write(text))
     self.wait(0.1)
@@ -540,4 +593,20 @@ def NewtonLagrangeInterpolation(f, x):
     self.play(Write(blist))
     self.wait(0.1)
 
+    self.clear_all()
+  
+  def play_ending(self):
+
+    text = Tex("That's all folks!").set_color_by_gradient(BLUE, GREEN).scale(1.5).center()
+    cat = ImageMobject("assets/cat.jpeg").center()
+    bg = BackgroundRectangle(text, fill_opacity=0.5, buff=MED_LARGE_BUFF)
+    bg.set_z_index(text.z_index - 1)
+    cat.set_z_index(bg.z_index - 1)
+
+    self.play(GrowFromCenter(cat))
+    self.wait(0.1)
+    self.next_slide()
+
+    self.play(Write(text), Create(bg))
+    
     self.clear_all()
