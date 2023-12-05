@@ -315,7 +315,7 @@ def NewtonLagrangeInterpolation(f, x):
       ),
     ).arrange(DOWN).set_z_index(110)
 
-    axes = Axes(x_range=[-2, 2], y_range=[-2, 2], tips=False).scale(0.8)
+    axes = Axes(x_range=[-2, 2], y_range=[-2, 2], tips=False)
 
     self.play(Write(function))
     self.next_slide()
@@ -424,7 +424,6 @@ def NewtonLagrangeInterpolation(f, x):
         Write(question),
         lag_ratio=0.5
       ),
-      run_time=1
     )
     self.wait(0.1)
     
@@ -437,7 +436,11 @@ def NewtonLagrangeInterpolation(f, x):
       Tex(r"This is called the ", "Runge's Phenonenon", "!")
     ).arrange(DOWN).scale(0.8)
 
-    self.play(Write(text))
+    for elem in text:
+      self.play(Write(elem))
+      self.wait(0.1)
+      self.next_slide()
+
     self.play(text[2][1].animate.set_color_by_gradient(BLUE, GREEN), run_time=0.5)
 
     self.next_slide()
@@ -476,7 +479,7 @@ def NewtonLagrangeInterpolation(f, x):
 
     function[1][0].set_color(BLUE)
 
-    axes = Axes(x_range=[-2, 2], y_range=[-1, 1.5], tips=False).scale(0.8)
+    axes = Axes(x_range=[-2, 2], y_range=[-1, 1.5], tips=False)
 
     self.play(Write(function))
     self.next_slide()
