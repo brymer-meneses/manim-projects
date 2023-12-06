@@ -270,7 +270,7 @@ $L_{f, n}$ $\in \mathbb{R}_n[x]$ is defined by""",
 
     lagrange_poly = MathTex(
       r"L_{f, n}(x) = \sum_{k = 0}^n f(x_k) \prod_{\substack{j = 0 \\ j \neq k}}^n \frac{x - x_j}{x_k - x_j}",
-      substrings_to_isolate=[r"\frac{x - x_j}{x_k - x_j}", "f", "L_{f, n}"],
+      substrings_to_isolate=[r"\prod_{\substack{j = 0 \\ j \neq k}}^n \frac{x - x_j}{x_k - x_j}", "f", "L_{f, n}"],
       tex_to_color_map={"f": BLUE, "L_{f, n}": RED, r"\frac{x - x_j}{x_k - x_j}": WHITE}
     ).next_to(text, DOWN)
     self.play(
@@ -281,6 +281,10 @@ $L_{f, n}$ $\in \mathbb{R}_n[x]$ is defined by""",
         lag_ratio=0.5
       )
     )
+    self.wait(0.1)
+
+    self.next_slide()
+    self.play(Circumscribe(lagrange_poly[4]))
     self.wait(0.1)
 
     self.next_slide()
@@ -450,7 +454,7 @@ def NewtonLagrangeInterpolation(f, x):
     text = VGroup(
       Tex("Unfortunately, the answer is no!").scale(1.4).set_color_by_gradient(ORANGE, RED),
       Tex(r"It can be shown that for equally spaced nodes including the endpoints, \\ a function $f$ may result to $||f - L_{f,n}||_\infty \to \infty$ as $n \to \infty$. "),
-      Tex(r"This is called the ", "Runge's Phenonenon", "!")
+      Tex(r"This is called the ", "Runge's Phenomenon", "!")
     ).arrange(DOWN).scale(0.8)
 
     for elem in text:
@@ -502,7 +506,7 @@ def NewtonLagrangeInterpolation(f, x):
     self.next_slide()
     self.play(Unwrite(function[0]))
     self.play(function[1].animate.move_to(0.8 * axes.get_corner(UP + LEFT)).scale(.6))
-    bg1 = BackgroundRectangle(function[1], fill_opacity=0.5).set_z_index(100)
+    bg1 = BackgroundRectangle(function[1], fill_opacity=0.5, buff=MED_SMALL_BUFF).set_z_index(100)
 
     self.play(FadeIn(bg1))
 
